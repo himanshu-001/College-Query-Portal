@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="container">
+    <h2>{{ post.title }}</h2>
+      <h5><span class="glyphicon glyphicon-time"></span> Post by {{ post.user.username }} on {{ post.date }}</h5><br>
+        <p><span class="text-wrapper">{{ post.body }}</span></p>
+      <hr>
+        <div class="col-md-10 col-md-offset-2">
+            <div class="row">
+
+              <form role="form" method="POST">
+                <div class="form-group">
+                {% for field in form %}
+                    {% csrf_token %}
+                  {{ field }}
+                {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-default pull-right">Comment</button>
+              </form>
+            </div>
+        </div>
+      <br><br>
+{#        <div class="container col-md-8">#}
+{#            <div class="row1">#}
+{#      <span class="badge">{{ post.posts.count }}</span> Comment(s):<br>#}
+{#                <div class="panel-body">#}
+{#                {% for comment in post.posts.all %}#}
+{#                    <ul>#}
+{#                    {{ comment.text }} by {{ comment.user }},{{ comment.created_date|timesince }} ago#}
+{#                    </ul>#}
+{#                {% endfor %}#}
+{#                </div>#}
+            <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-md-offset-2">
+                  <div class="page-header">
+                      <b class="lead">{{ post.posts.count }} Comment(s):</b>
+                  </div>
+                   <div class="comments-list">
+                       {% for comment in post.posts.all %}
+                       <div class="media">
+                           <p class="pull-right"><small>{{ comment.created_date|timesince }} ago</small></p>
+                            <div class="media-body">
+
+                              <h4 class="media-heading user_name">{{ comment.user }}</h4>
+                              {{ comment.text }}
+
+                                <p><small><a href="">UpVote</a></small></p>
+                            </div>
+                          </div>
+                           <hr>
+                       {% endfor %}
+                   </div>
+                </div>
+            </div>
+        </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
