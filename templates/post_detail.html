@@ -1,51 +1,57 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
+{% block style %}{% endblock style %}
+
 {% block content %}
-    <div class="container">
+    <div class="container 1">
     <h2>{{ post.title }}</h2>
-      <h5><span class="glyphicon glyphicon-time"></span> Post by {{ post.user.username }} on {{ post.date }}</h5><br>
-        <p><span class="text-wrapper">{{ post.body }}</span></p>
-      <hr>
-        <div class="col-md-10 col-md-offset-2">
+        <h5>
+            <span class="glyphicon glyphicon-time"></span> Post by {{ post.user.username }} on {{ post.date }}
+            {% if request.user == post.user %}
+                <a href="{% url 'delete' pk=post.pk %}"><button style="margin-left: 10px" class="btn btn-inverse glyphicon glyphicon-trash pull-right"></button></a>
+                <a href="{% url 'edit' pk=post.pk %}"><button class="btn btn-inverse glyphicon glyphicon-pencil pull-right"></button></a>
+            {% endif %}
+        </h5>
+        <br>
+        <div class="row col-md-10 col-md-offset-1">
+        <p><span class="text-wrapper">{{ post.body|safe }}</span></p>
+        </div>
+    </div>
+<hr>
+    <div class="container 2">
+        <div class="col-md-9 col-md-offset-2">
             <div class="row">
 
               <form role="form" method="POST">
                 <div class="form-group">
-                {% for field in form %}
-                    {% csrf_token %}
-                  {{ field }}
-                {% endfor %}
+                {% csrf_token %}
+                    {{ form.media }}
+                    {{ form|crispy }}
                 </div>
-                <button type="submit" class="btn btn-default pull-right">Comment</button>
+                <button type="submit" class="btn btn-default pull-right">Post Comment</button>
               </form>
             </div>
         </div>
       <br><br>
-{#        <div class="container col-md-8">#}
-{#            <div class="row1">#}
-{#      <span class="badge">{{ post.posts.count }}</span> Comment(s):<br>#}
-{#                <div class="panel-body">#}
-{#                {% for comment in post.posts.all %}#}
-{#                    <ul>#}
-{#                    {{ comment.text }} by {{ comment.user }},{{ comment.created_date|timesince }} ago#}
-{#                    </ul>#}
-{#                {% endfor %}#}
-{#                </div>#}
             <div class="container">
             <div class="row">
                 <div class="col-md-9 col-md-offset-2">
                   <div class="page-header">
-                      <b class="lead">{{ post.posts.count }} Comment(s):</b>
+                      {% if post.posts.count == 0 %}
+                          <b class="lead">No Comments Yet</b>
+                      {% else %}
+                          <b class="lead">{{ post.posts.count }} Comment(s):</b>
+                      {% endif %}
                   </div>
                    <div class="comments-list">
                        {% for comment in post.posts.all %}
                        <div class="media">
                            <p class="pull-right"><small>{{ comment.created_date|timesince }} ago</small></p>
-                            <div class="media-body">
+                            <div class="media-body img-responsive">
 
                               <h4 class="media-heading user_name">{{ comment.user }}</h4>
-                              {{ comment.text }}
+                              {{ comment.comments|safe }}
 
                                 <p><small><a href="">UpVote</a></small></p>
                             </div>
@@ -56,7 +62,14 @@
                 </div>
             </div>
         </div>
-            </div>
-        </div>
     </div>
 {% endblock %}
+
+{% block js %}
+    <script>
+        $(window).resize(function(){
+            var newwidth = "100%";
+            $("#cke_id_comments").width(newwidth);
+        });
+    </script>
+{% endblock js %}

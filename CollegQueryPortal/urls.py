@@ -30,11 +30,13 @@ urlpatterns = [
     # path('profile/', views.profile, name='profile'),
     path('update profile/', views.UpdateProfileView.as_view(), name='update profile'),
     path('user info/', views.UpdateUserView.as_view(), name='update user info'),
-    path('login/', auth_views.login,  {'template_name': 'registration/login.html'}, name='login'),
+    path('login/', auth_views.login, {'template_name': 'registration/login.html'}, name='login'),
     path('logout/', auth_views.logout, name='logout'),
     path('home/', post_views.PostList.as_view(), name='home'),
     path('post-detail/<int:pk>/', login_required(post_views.PostDetail.as_view()), name='post_detail'),
-    # path('post-detail/<int:pk>/comment/', Comments_views.add_comment_to_post, name='add_comment_to_post'),
+    path('edit/post/<int:pk>', login_required(post_views.EditPost.as_view()), name='edit'),
+    path('edit/delete/<int:pk>', login_required(post_views.DeletePost.as_view()), name='delete'),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 
 
 ]

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
     {% if user.is_authenticated %}
         <div class="container-fluid">
@@ -20,9 +21,9 @@
                   </div>
                   <hr>
                   <ul class="container-fluid" >
-                      <li><span class="glyphicon glyphicon-user one"></span> {{ user.username }}</li>
-                      <li><span class="glyphicon glyphicon-envelope one"></span> {{ user.email }}</li>
-                      <li><span class="glyphicon glyphicon-info-sign"></span> {{ user.profile.bio }}</li>
+                      <p><span class="glyphicon glyphicon-user one"></span> {{ user.username }}</p>
+                      <p><span class="glyphicon glyphicon-envelope one"></span> {{ user.email }}</p>
+                      <p><span class="glyphicon glyphicon-info-sign"></span> {{ user.profile.bio }}</p>
                   </ul>
                   <hr>
                   <span>Date Of Birth: {{ user.profile.birth_date }}</span>
@@ -31,39 +32,48 @@
       </div>
 </div>
 <div class="col-md-8">
-    <div class="left-panel">
-        <br>
-        <div class="panel panel-default">
-            <div class="panel-heading"><h4><b>Queries Posted</b></h4></div>
+                    <h1 class="page-header">
+                    <small>Posts</small>
+                </h1>
+                <!-- First Blog Post -->
             {% for post in object_list %}
-                <div class="panel-body">
-                    <div class="media">
-                        <div class="media-body">
-                            <a class="media-heading" href="{{ post.get_absolute_url }}"><h4>{{ post.title }}</h4></a>
-                            <p>{{ post.body| truncatechars:120 }}<a href="{{ post.get_absolute_url }}">..Read More</a></p>
-                            <ul class="list-inline list-unstyled">
-                                <li class="glyphicon glyphicon-user"> {{ post.user.username }}</li>
-                                <li class="glyphicon glyphicon-calendar"> {{ post.date|timesince }}</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                <h3>
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                </h3>
+                <p class="new">
+                    by <a>{{ post.user.username }}</a>
+                </p>
+                <p><span class="glyphicon glyphicon-time"></span> {{ post.date }}</p>
+                    <p>{% autoescape off %}{{ post.body|truncatechars_html:120|safe }}{% endautoescape %}</p>
+{#                    <p>{{ post.body| truncatechars:120 }}</p>#}
+
+                <a class="btn btn-primary" href="{{ post.get_absolute_url }}">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+
+                <hr>
             {% endfor %}
-        </div>
-    <div class="container col-md-6">
-        <ul class="pagination">
-    <li class="disabled"><a href="#"><span aria-hidden="true">«</span><span class="sr-only">Previous</span></a></li>
-    <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-    <li><a href="#">2 <span class="sr-only">(P2)</span></a></li>
-    <li><a href="#">3 <span class="sr-only">(P3)</span></a></li>
-    <li><a href="#">4 <span class="sr-only">(P4)</span></a></li>
-	<li><a href="#"><span aria-hidden="true">»</span><span class="sr-only">Next</span></a></li>
-	</ul>
-    </div>
-    </div>
-
-
 </div>
+        <div class="container col-md-6 col-md-offset-5">
+        {% if is_paginated %}
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
 </div>
     {% else %}
         <div class="container-fluid">

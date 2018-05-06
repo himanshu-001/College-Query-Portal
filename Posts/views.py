@@ -1,10 +1,13 @@
-from django.shortcuts import get_object_or_404
+from datetime import datetime
+from django.http import Http404, HttpResponse
+from django.shortcuts import get_object_or_404, render
 
+from Posts.forms import PostForm
 from accounts.models import Profile
 from Comments.forms import CommentForm
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import FormMixin
+from django.views.generic.edit import FormMixin, UpdateView, DeleteView
 from Posts.models import Post
 from Comments.models import Comment
 
@@ -13,11 +16,10 @@ class PostList(ListView):
     model = Post
     template_name = 'posts.html'
     extra_context = {"prof": Profile.objects.all()}
+    context_object_name = 'posts'
+    paginate_by = 4
+    queryset = Post.objects.order_by('-date')  # Default: Model.objects.all()
 
-
-# class PostDetail(DetailView):
-#     model = Post
-#     template_name = 'post_detail.html'
 
 class PostDetail(FormMixin, DetailView):
     template_name = 'post_detail.html'
@@ -47,3 +49,37 @@ class PostDetail(FormMixin, DetailView):
         comment.save()
         # want to save post instance here.
         return super(PostDetail, self).form_valid(form)
+
+
+class EditPost(UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name ="edit_post.html"
+
+    def test_func(self):
+        post_user = self.request.user.pk
+        print(post_user)
+        post_made = Post.objects.get(user='user')
+        print(post_made)
+        if post_user == post_made:
+            return reverse('post_detail')
+        else:
+            if self.request.user.is_authenticated():
+                raise HttpResponse("You are not allowed to edit this Post")
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.user != self.request.user:
+            return Http404("You are not allowed to edit this Post")
+        return super(EditPost, self).dispatch(request, *args, **kwargs)
+
+
+class DeletePost(DeleteView):
+    model = Post
+    success_url = reverse_lazy('home')
+    template_name = 'post_confirm_delete.html'
+    success_message = 'Post Deleted Successfully..!'
+
+    def get_queryset(self):
+        user = self.request.user
+        return self.model.objects.filter(user=user)
