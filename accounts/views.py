@@ -5,6 +5,7 @@ from django.views.generic.edit import UpdateView
 from .models import Profile
 from .forms import SignUpForm, UserProfileForm, UserEditForm
 from Posts.forms import PostForm
+from registration.backends.default.views import RegistrationView
 
 
 def add_post(request):
@@ -20,16 +21,28 @@ def add_post(request):
     return render(request, "addpost.html", {"form": form})
 
 
-def signup(request):
-    form = SignUpForm(request.POST or None)
-    print("it is here")
-    if form.is_valid():
-        print("inside is here")
-        user = form.save(commit=False)
-        user.save()
-        return HttpResponseRedirect('/login/')#login
-    else:
-        return render(request, 'signup.html', {'form': form})
+class MyRegistrationView(RegistrationView):
+    def get_success_url(self, user):
+        return '/login/'
+
+    def register(self, form_class):
+        # logging.debug("Registering")
+        new_user = super(MyRegistrationView, self).register(form_class)
+        new_user.save()
+        return new_user
+
+# def signup(request):
+#     form = SignUpForm(request.POST or None)
+#     # print("it is here")
+#     if form.is_valid():
+#         # print("inside is here")
+#         user = form.save(commit=False)
+#         user.save()
+#         return HttpResponseRedirect('/login/')#login
+#     else:
+#         return render(request, 'signup.html', {'form': form})
+
+
 
 @login_required
 def profile(request):

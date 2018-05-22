@@ -11,6 +11,10 @@
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
     {% block style %}
 
     {% endblock style %}
@@ -37,8 +41,8 @@
                       <li><a href="{% url 'update user info' %}">User</a></li>
                       <li><a class="pull-right" href="{% url 'logout' %}">Sign Out</a></li>
                   {% else %}
-                      <li><a href="{% url 'login' %}">Login</a></li>
-                      <li><a href="{% url 'signup' %}">Signup</a></li>
+                      <li><a href="{% url 'auth_login' %}">Login</a></li>
+                      <li><a href="{% url 'registration_register' %}">Signup</a></li>
                   {% endif %}
 		      </ul>
 		    </div><!-- /.navbar-collapse -->

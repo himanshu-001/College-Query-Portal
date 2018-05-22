@@ -1,4 +1,4 @@
-#!E:\himanshu\Python project\CollegQueryPortal\venv\Scripts\python.exe
+#!e:\himanshu\python~2\colleg~1\venv\scripts\python.exe
 from django.core import management
 
 if __name__ == "__main__":

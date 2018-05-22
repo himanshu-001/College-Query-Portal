@@ -11,7 +11,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name='posts', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comments = RichTextUploadingField(verbose_name='Leave a Comment :')
+    comments = RichTextUploadingField(verbose_name='Leave a Comment :', null=True, config_name='custom')
     created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

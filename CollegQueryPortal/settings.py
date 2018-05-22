@@ -27,10 +27,19 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'no.reply.9325@gmail.com' # email id
+EMAIL_HOST_PASSWORD = 'himan1234' #password
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
+SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.sites',
+    'registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,9 +52,24 @@ INSTALLED_APPS = [
     'Posts.apps.PostsConfig',
     'ckeditor',
     'ckeditor_uploader',
+
 ]
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
+
+CKEDITOR_CONFIGS = {
+    'custom': {
+        'toolbar': 'Custom',
+        'height': 350,
+        'toolbar_Custom': [
+            ['Styles', 'Format', 'Bold', 'Italics', 'Underline', 'Strike', 'Undo', 'Redo'],
+            ['Link', 'Image'],
+            ['CodeSnippet'],
+        ],
+        'extraPlugins': 'codesnippet',
+        "codeSnippet_theme": "monokai_sublime",
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -139,3 +163,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "CollegQueryPortal")
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+ACCOUNT_ACTIVATION_DAYS = 2
+REGISTRATION_AUTO_LOGIN = True

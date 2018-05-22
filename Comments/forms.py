@@ -1,9 +1,11 @@
+from ckeditor_uploader.fields import RichTextUploadingField
+
 from Comments.models import Comment
 from django import forms
 
 
 class CommentForm(forms.ModelForm):
-    # comments = forms.CharField(label='Leave a Comment :', widget=forms.Textarea, required=False)
+    comments = RichTextUploadingField()
 
     class Meta:
         model = Comment

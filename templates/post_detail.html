@@ -9,8 +9,8 @@
         <h5>
             <span class="glyphicon glyphicon-time"></span> Post by {{ post.user.username }} on {{ post.date }}
             {% if request.user == post.user %}
-                <a href="{% url 'delete' pk=post.pk %}"><button style="margin-left: 10px" class="btn btn-inverse glyphicon glyphicon-trash pull-right"></button></a>
-                <a href="{% url 'edit' pk=post.pk %}"><button class="btn btn-inverse glyphicon glyphicon-pencil pull-right"></button></a>
+                <a href="{% url 'delete' pk=post.pk %}"><button style="margin-left: 10px" class="btn btn-danger glyphicon glyphicon-trash pull-right"></button></a>
+                <a href="{% url 'edit' pk=post.pk %}"><button class="btn btn-primary glyphicon glyphicon-pencil pull-right"></button></a>
             {% endif %}
         </h5>
         <br>
@@ -52,9 +52,12 @@
 
                               <h4 class="media-heading user_name">{{ comment.user }}</h4>
                               {{ comment.comments|safe }}
-
-                                <p><small><a href="">UpVote</a></small></p>
+                                <p><small><a href="">UpVote</a></small></p> <!-- move it to the next div along with a button-->
                             </div>
+                       {% if request.user == comment.user %}
+                                    <a href="{% url 'delete' pk=comment.pk %}"><button style="margin-left: 10px" class="btn btn-danger glyphicon glyphicon-trash pull-right"></button></a>
+                                    <a href="{% url 'edit' pk=comment.pk %}"><button class="btn btn-primary glyphicon glyphicon-pencil pull-right"></button></a>
+                                {% endif %}
                           </div>
                            <hr>
                        {% endfor %}
