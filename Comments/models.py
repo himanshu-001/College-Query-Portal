@@ -6,6 +6,7 @@ from django.utils import timezone
 # from markdown import markdown
 # from django.utils.html import mark_safe
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.template.defaultfilters import slugify
 
 
 class Comment(models.Model):
@@ -13,9 +14,20 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comments = RichTextUploadingField(verbose_name='Leave a Comment :', null=True, config_name='custom')
     created_date = models.DateTimeField(default=timezone.now)
+    slug = models.SlugField()
+    likes = models.ManyToManyField(User, related_name='likes')
 
     def __str__(self):
         return self.comments
 
-    # def get_comments_as_markdown(self):
-    #     return mark_safe(markdown(self.comments, safe_mode='escape'))
+    @property
+    def total_likes(self):
+        """
+        Likes for the company
+        :return: Integer: Likes for the company
+        """
+        return self.likes.count()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.comments)
+        super(Comment, self).save(*args, **kwargs)

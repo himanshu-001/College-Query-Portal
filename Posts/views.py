@@ -1,7 +1,6 @@
+from django.db.models import Q
 from datetime import datetime
 from django.http import Http404, HttpResponse
-from django.shortcuts import get_object_or_404, render
-
 from Posts.forms import PostForm
 from accounts.models import Profile
 from Comments.forms import CommentForm

@@ -61,9 +61,12 @@ CKEDITOR_CONFIGS = {
     'custom': {
         'toolbar': 'Custom',
         'height': 350,
+        'width': '100%',
         'toolbar_Custom': [
-            ['Styles', 'Format', 'Bold', 'Italics', 'Underline', 'Strike', 'Undo', 'Redo'],
-            ['Link', 'Image'],
+            ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'Undo', 'Redo'],
+            ['Table', 'Link', 'Image', 'Preview', 'Print', 'Indent', 'Outdent'],
+            ['Blockquote','JustifyLeft', 'JustifyCenter', 'JustifyRight'],
+            ['HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak'],
             ['CodeSnippet'],
         ],
         'extraPlugins': 'codesnippet',
@@ -148,6 +151,7 @@ USE_TZ = True
 
 
 LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
