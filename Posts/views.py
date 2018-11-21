@@ -1,6 +1,7 @@
 from django.db.models import Q
 from datetime import datetime
-from django.http import Http404, HttpResponse
+from django.http import (Http404, HttpResponse) 
+from django.shortcuts import render
 from Posts.forms import PostForm
 from accounts.models import Profile
 from Comments.forms import CommentForm
@@ -82,3 +83,18 @@ class DeletePost(DeleteView):
     def get_queryset(self):
         user = self.request.user
         return self.model.objects.filter(user=user)
+
+
+def postsearch(request):
+    if request.method == "GET":
+        input_text = request.GET["mysearch"]
+        print(input_text)
+        try :
+            post_list = Post.objects.filter(Q(title__icontains=input_text)|Q(body__icontains=input_text))
+            print(post_list)
+            return render(request, "test.html", {"post_list":post_list})
+        except:
+            return render(request, "test.html", {"none":"No Result Found"})
+    else:
+        return redirect(".")
+

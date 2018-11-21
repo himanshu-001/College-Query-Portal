@@ -38,7 +38,8 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('accounts/register/', views.MyRegistrationView.as_view(form_class=SignUpForm), name="registration_register"),
     path('accounts/', include('registration.backends.default.urls')),
-    path('like/', Comments_views.like, name='like')
+    path('like/', Comments_views.like, name='like'),
+    path('search_results/', post_views.postsearch, name="search"),
 ]
 
 if settings.DEBUG:
